@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"os"
+
+	"artbycode.id/go-app/cmd/server/runner"
+)
 
 func main() {
-	fmt.Println("Hello, from server!")
+	server := runner.InitializeRunnerServer()
+	if err := server.Run(); err != nil {
+		os.Exit(1)
+	}
 }
