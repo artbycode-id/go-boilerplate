@@ -4,31 +4,23 @@
 package runner
 
 import (
-	"artbycode.id/go-app/services/api"
-	"artbycode.id/go-app/services/api/apiimpl"
-	"artbycode.id/go-app/services/attendance"
-	"artbycode.id/go-app/services/attendance/attendanceimpl"
-	"artbycode.id/go-app/services/config"
-	"artbycode.id/go-app/services/config/configimpl"
-	"artbycode.id/go-app/services/database/databaseimpl"
-	"artbycode.id/go-app/services/user"
-	"artbycode.id/go-app/services/user/userimpl"
+	"artbycode.id/go-app/internal/api"
+	"artbycode.id/go-app/internal/config"
+
+	"artbycode.id/go-app/internal/services/auth"
+	"artbycode.id/go-app/internal/services/auth/authimpl"
+
 	"github.com/google/wire"
 )
 
 var wireSetService = wire.NewSet(
 	NewRunnerServer,
-	apiimpl.NewApiService,
-	configimpl.NewConfigService,
-	userimpl.NewUserService,
-	databaseimpl.NewDatabaseService,
-	attendanceimpl.NewAttendanceService,
-	attendanceimpl.NewScheduleService,
-	wire.Bind(new(api.ApiService), new(*apiimpl.ApiService)),
-	wire.Bind(new(user.UserService), new(*userimpl.UserService)),
-	wire.Bind(new(attendance.AttendanceService), new(*attendanceimpl.AttendanceService)),
-	wire.Bind(new(attendance.ScheduleService), new(*attendanceimpl.ScheduleService)),
-	wire.Bind(new(config.ConfigService), new(*configimpl.ConfigService)),
+	api.NewApiService,
+	config.NewConfigService,
+	authimpl.NewUserRepositoryImpl,
+	wire.Bind(new(auth.UserRepository), new(*authimpl.UserRepositoryImpl)),
+	authimpl.NewAuthServiceImpl,
+	wire.Bind(new(auth.AuthService), new(*authimpl.AuthServiceImpl)),
 )
 
 func InitializeRunnerServer() *RunnerServer {

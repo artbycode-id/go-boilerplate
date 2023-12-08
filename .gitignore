@@ -1,0 +1,34 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with 'go test -c'
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Directory for test binaries & coverage output
+_test/
+
+# Compiled Go files
+*.a
+*.o
+
+# Ignore the vendor directory
+/vendor/
+
+# Ignore any temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Ignore the go build cache
+/.cache/
+
+# Ignore wire generated files
+wire_gen.go
+wire_gen_test.go

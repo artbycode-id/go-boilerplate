@@ -1,14 +1,14 @@
 package main
 
 import (
-	"os"
+	"log"
 
 	"artbycode.id/go-app/cmd/server/runner"
 )
 
 func main() {
-	server := runner.InitializeRunnerServer()
-	if err := server.Run(); err != nil {
-		os.Exit(1)
+	runnerServer := runner.InitializeRunnerServer()
+	if err := runnerServer.Run(); err != nil {
+		log.Fatal(err)
 	}
 }

@@ -1,45 +1,34 @@
 package runner
 
 import (
-	"log"
+	"os"
 
-	"artbycode.id/go-app/services/api"
-	"artbycode.id/go-app/services/config"
-	"artbycode.id/go-app/services/database"
-	"github.com/joho/godotenv"
+	"artbycode.id/go-app/internal/api"
+	"artbycode.id/go-app/internal/config"
 )
 
 type RunnerServer struct {
-	databaseService database.DatabaseService
-	apiService      api.ApiService
-	configService   config.ConfigService
+	apiService    api.ApiService
+	configService config.ConfigService
 }
 
-func NewRunnerServer(databaseService database.DatabaseService, apiService api.ApiService, configService config.ConfigService) *RunnerServer {
+func NewRunnerServer(apiService api.ApiService, configService config.ConfigService) *RunnerServer {
 	return &RunnerServer{
-		databaseService: databaseService,
-		apiService:      apiService,
-		configService:   configService,
+		apiService:    apiService,
+		configService: configService,
 	}
 }
 
 func (r *RunnerServer) Run() error {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-	// init configuration
-	if err := r.configService.InitConfig(); err != nil {
+	var cfgFile = func() string {
+		if customFile := os.Getenv("APP_CONFIG_FILE"); customFile != "" {
+			return customFile
+		}
+		return "./config/app.yml"
+	}()
+
+	if err := r.configService.Load(cfgFile); err != nil {
 		return err
 	}
-
-	// init database
-	if err := r.databaseService.InitConnection(); err != nil {
-		return err
-	}
-
-	// auto migrate databse
-	r.databaseService.Migrate()
-
-	return r.apiService.Run()
+	return r.apiService.Serve()
 }
