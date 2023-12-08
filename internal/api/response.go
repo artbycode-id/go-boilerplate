@@ -23,10 +23,3 @@ func errorInternalServerResponseBody(msgDetail error) *ResponseErrorBody {
 		Detail:   msgDetail.Error(),
 	}
 }
-
-func successResponseBody(data interface{}) *ResponseBody {
-	return &ResponseBody{
-		Data:    data,
-		Message: "success",
-	}
-}
